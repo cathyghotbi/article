@@ -1,12 +1,39 @@
-Every programming language has its own tools to give the programmer the power to perform an idea.
-In this article we take C++ as the programming language and callback as idea to perform, also gmock for a way to test our code.
-Callback in real life, you call someone, they can not answer at that moment for any reason, you request for a callback so that they call you in a later time.
+Every programming language has tool to use to implement a concept.
+In this article we take C++ as the programming language and callback as concept to implement, also gmock for a way to test our code.
+
+Callbacks exit in real life, you call someone, they can not answer at that moment for any reason, you request for a callback so that they call you in a later time.
 In programming languages, the concept of 'callback function' (lets name is callMeBack())is a function which is argument of another function (lets name it func()).
 As part of its body, func() will call callMeBack() sometime.
+
 There are 2 types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
-Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job. 
-In C++, lambda and function pointers support the blocking/ synchronous ones. 
-They can be stored, copied and invoked by a general-purpose function wrapper, std::function.
+Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job.
+
+In C++, lambda and function pointers support the implementation of callbacks. They are Callable.
+std::function is a general-purpose function wrapper which can store, copy and invoke any Callable.
+std:fucntion is a preferred way of passing callbacks.
+
+As an example of blocking/synchronous callback:
+void doSomething(std::function<void()> task)
+{
+  task();
+}
+
+and as an example of deferred/ asynchronous callback:
+class User
+{
+  User(std::function<void()> task)
+  : m_task(task)
+  {
+  }
+  
+  void doSomething()
+  {
+    m_task();
+  }
+
+private:
+  std::function<void()> m_task;
+};
 
 A simple example of std::fucntion below:
 
