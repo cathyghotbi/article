@@ -5,11 +5,11 @@ Callbacks exit in real life, you call someone, they can not answer at that momen
 In programming languages, the concept of 'callback function' (lets name is callMeBack())is a function which is argument of another function (lets name it func()).
 As part of its body, func() will call callMeBack() sometime.
 
-There are 2 types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
+There are two types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
 Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job.
 
-In C++, lambda and function pointers support the implementation of callbacks. They are Callable.
-std::function is a general-purpose function wrapper which can store, copy and invoke any Callable.
+C++ has some Callables: functions, lambda expressions, bind expression, function objects and function pointers.
+There is also a class template std::function which is a general-purpose function wrapper which can store, copy and invoke any Callable.
 std:fucntion is a preferred way of passing callbacks.
 
 As an example of blocking/synchronous callback:
