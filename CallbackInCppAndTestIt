@@ -7,6 +7,29 @@ C++ has some Callables: functions, lambda expressions, bind expression, function
 There is also a class template std::function which is a general-purpose function wrapper which can store, copy and invoke any Callable.
 std:fucntion is often used to pass callbacks.
 
+void callMeBack(int x)
+{
+  std::cout << x << std::endl;
+}
+
+void func(std::function<void(int)> callback)
+{
+  int knownValueAtThisPoint = 11;
+  callback(knownValueAtThisPoint);
+}
+
+int main() 
+{
+  std::function<void(int)> callLater = callMeBack;
+  callLater(5);
+
+  func(callLater);
+  return 0;
+}
+
+There are two types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
+Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job.
+A simple example of std::fucntion below:
 As an example of blocking/synchronous callback:
 void doSomething(std::function<void()> task)
 {
@@ -29,35 +52,6 @@ class User
 private:
   std::function<void()> m_task;
 };
-
-
-There are two types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
-Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job.
-A simple example of std::fucntion below:
-
-#include <iostream>
-#include <functional>
-
-void callMeBack(int x)
-{
-  std::cout << x << std::endl;
-}
-
-void func(std::function<void(int)> callback)
-{
-  int knownValueAtThisPoint = 11;
-  callback(knownValueAtThisPoint);
-}
-
-int main() 
-{
-  std::function<void(int)> callLater = callMeBack;
-  callLater(5);
-  
-  
-  func(callLater);
-  return 0;
-}
 
 Now, lets look into how std::function can be tested using gmock.
 To mock std::function in tests, gmock provides MockFunction.
