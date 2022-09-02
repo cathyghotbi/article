@@ -1,11 +1,7 @@
 Title: Implement and test callbacks in C++ and gmock
 
 In this article we implement the concept of callback in C++, also use gmock for a way to test our code.
-
 Callbacks exit in real life, you call someone, they can not answer at that moment for any reason, you request for a callback so that they call you in a later time.
-
-There are two types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
-Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job.
 
 C++ has some Callables: functions, lambda expressions, bind expression, function objects and function pointers.
 There is also a class template std::function which is a general-purpose function wrapper which can store, copy and invoke any Callable.
@@ -34,6 +30,9 @@ private:
   std::function<void()> m_task;
 };
 
+
+There are two types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
+Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job.
 A simple example of std::fucntion below:
 
 #include <iostream>
