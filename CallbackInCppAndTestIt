@@ -3,7 +3,8 @@ In this article we take C++ as the programming language and callback as idea to 
 Callback in real life, you call someone, they can not answer at that moment for any reason, you request for a callback so that they call you in a later time.
 In programming languages, the concept of 'callback function' (lets name is callMeBack())is a function which is argument of another function (lets name it func()).
 As part of its body, func() will call callMeBack() sometime.
-There are 2 types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job. 
+There are 2 types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
+Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job. 
 In C++, lambda and function pointers support this concept. They can be stored, copied and invoked by a general-purpose function wrapper, std::function.
 
 A simple example of std::fucntion below:
@@ -34,7 +35,8 @@ int main()
 
 Now, lets look into how std::function can be tested using gmock.
 To mock std::function in tests, gmock provides MockFunction.
-First you need to create MockFunction object, obtain a std::fucntion proxy to Call from AsStdFucntion(), then setup expectation on its Call method and pass the obtained proxy to the test.  
+First you need to create MockFunction object, obtain a std::fucntion proxy to Call from AsStdFucntion(), 
+then setup expectation on its Call method and pass the obtained proxy to the test.  
 
 Below there is an example of the std::funciton and MockFunction in a unit test:
 
