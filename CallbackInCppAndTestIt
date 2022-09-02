@@ -5,7 +5,8 @@ In programming languages, the concept of 'callback function' (lets name is callM
 As part of its body, func() will call callMeBack() sometime.
 There are 2 types of callbacks, blocking ones (synchronous) and deferred ones (asynchronous). 
 Difference is blocking ones are called before the caller function returns so the caller actually waits for them to finish their job. 
-In C++, lambda and function pointers support the blocking/ synchronous ones. They can be stored, copied and invoked by a general-purpose function wrapper, std::function.
+In C++, lambda and function pointers support the blocking/ synchronous ones. 
+They can be stored, copied and invoked by a general-purpose function wrapper, std::function.
 
 A simple example of std::fucntion below:
 
@@ -42,50 +43,22 @@ Below there is an example of the std::funciton and MockFunction in a unit test:
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-
-//---------------------------------------------------------------------------------------------------------
-class FutureTaskIf
-{
-public:
-  virtual void doTheTask() = 0;
-};
-//---------------------------------------------------------------------------------------------------------
-class FutureTask : public FutureTaskIf
-{
-public:
-  FutureTask(std::function<void()> futureTask)
-  : m_futureTask(futureTask)
-  { 
-  }
-
-  void doTheTask()
-  {
-    m_futureTask(); 
-  }
-private:
-  const std::function<void()> m_futureTask;
-};
-//---------------------------------------------------------------------------------------------------------
-class MockFutureTask : public FutureTaskIf
-{
-public:
-  MOCK_METHOD0(doTheTask, void());
-};
 //---------------------------------------------------------------------------------------------------------
 class User
 {
 public:
-  User()
+  User(std::function<void()> futureTask)
+  : m_futureTask(futureTask)
   {
   }
 
   void userAction()
   {
-    m_futureTask->doTheTask();
+    m_futureTask();
   }
 
 private:
-  std::unique_ptr<FutureTaskIf> m_futureTask;
+  std::function<void()> m_futureTask;
 };
 //---------------------------------------------------------------------------------------------------------
 using ::testing::_;
@@ -96,7 +69,7 @@ class UserTest : public ::testing::Test
 public:
   UserTest()
   {
-    m_user.reset(new User());
+    m_user.reset(new User(m_mockFutureTask.AsStdFunction()));
   }
 
 protected:
@@ -108,7 +81,6 @@ TEST_F(UserTest, testfutureTask)
 {
   EXPECT_CALL(m_mockFutureTask, Call());
 
-  m_mockFutureTask.AsStdFunction();
   m_user->userAction();
 }
 //---------------------------------------------------------------------------------------------------------
