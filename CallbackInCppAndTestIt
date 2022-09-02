@@ -9,7 +9,7 @@ Difference is blocking ones are called before the caller function returns so the
 
 C++ has some Callables: functions, lambda expressions, bind expression, function objects and function pointers.
 There is also a class template std::function which is a general-purpose function wrapper which can store, copy and invoke any Callable.
-std:fucntion is a preferred way of passing callbacks.
+std:fucntion is often used to pass callbacks.
 
 As an example of blocking/synchronous callback:
 void doSomething(std::function<void()> task)
