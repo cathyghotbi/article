@@ -1,5 +1,6 @@
-Every programming language has own tools to use to implement a concept.
-In this article we take C++ as the programming language and callback as concept to implement, also gmock for a way to test our code.
+Title: Implement and test callbacks in C++ and gmock
+
+In this article we implement the concept of callback in C++, also use gmock for a way to test our code.
 
 Callbacks exit in real life, you call someone, they can not answer at that moment for any reason, you request for a callback so that they call you in a later time.
 In programming languages, the concept of 'callback function' (lets name is callMeBack())is a function which is argument of another function (lets name it func()).
