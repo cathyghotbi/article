@@ -1,4 +1,4 @@
-Every programming language has tool to use to implement a concept.
+Every programming language has own tools to use to implement a concept.
 In this article we take C++ as the programming language and callback as concept to implement, also gmock for a way to test our code.
 
 Callbacks exit in real life, you call someone, they can not answer at that moment for any reason, you request for a callback so that they call you in a later time.
