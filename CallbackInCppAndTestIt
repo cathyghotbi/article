@@ -5,7 +5,7 @@ Callbacks exit in real life, you call someone, they can not answer at that momen
 
 C++ has some Callables: functions, lambda expressions, bind expression, function objects and function pointers.
 There is also a class template std::function which is a general-purpose function wrapper which can store, copy and invoke any Callable.
-std:fucntion is often used to pass callbacks.
+std:function is often used to pass callbacks.
 
 void callMeBack(int x)
 {
