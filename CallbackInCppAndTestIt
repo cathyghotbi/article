@@ -91,6 +91,7 @@ int main()
 }
 //---------------------------------------------------------------------------------------------------------
 
+This simple example shows how MockFunction can be used in a handy way to mock std::function for testing purposes.
 
 
 References
