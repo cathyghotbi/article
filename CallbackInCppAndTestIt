@@ -40,7 +40,6 @@ then setup expectation on its Call method and pass the obtained proxy to the tes
 
 Below there is an example of the std::funciton and MockFunction in a unit test:
 
-// https://godbolt.org/: library: google test trunk + x86-64 gcc 11.2
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -98,7 +97,6 @@ public:
   UserTest()
   {
     m_user.reset(new User());
-    //m_mockFutureTask.AsStdFunction();
   }
 
 protected:
