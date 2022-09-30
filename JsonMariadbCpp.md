@@ -211,12 +211,11 @@ public:
   }
   
   std::vector<Employee> parseJsonFile(const std::string& inputFilePath); 
-  void addJsonFileToDataBase();
+  void addJsonFileToDataBase(const std::vector<Employee>& employees);
 
 private:
   DataBase& m_database;
   nlohmann::json m_jsonObjectFromFile;
-  std::vector<Employee> m_employees;
 };
 ```
 ```
@@ -232,16 +231,12 @@ std::vector<Employee> JsonFile::parseJsonFile(const std::string& inputFilePath)
   std::ifstream fileToRead(inputFilePath);
   fileToRead >> m_jsonObjectFromFile;
   
-  std::string eachEmployee = "employee";
-  for(int i = 0; i < m_jsonObjectFromFile["employees"].size(); i++)
+  std::vector<Employee> employees;
+  for(std::size_t i = 0; i < m_jsonObjectFromFile["employees"].size(); i++)
   {
-    Address address;
-    Salary salary;
-    Employee employee;
+    const auto eachEmployee = "employee" + std::to_string(i+1);
     
-    std::string eachEmployee = "employee";
-    eachEmployee += std::to_string(i+1);
-  
+    Employee employee;
     employee.id = *(m_jsonObjectFromFile["employees"][eachEmployee].find("id"));
     employee.name = *(m_jsonObjectFromFile["employees"][eachEmployee].find("name"));
     employee.title = *(m_jsonObjectFromFile["employees"][eachEmployee].find("title"));
@@ -250,39 +245,34 @@ std::vector<Employee> JsonFile::parseJsonFile(const std::string& inputFilePath)
     employee.salary.value = *(m_jsonObjectFromFile["employees"][eachEmployee]["salary"].find("value"));
     employee.salary.currency = *(m_jsonObjectFromFile["employees"][eachEmployee]["salary"].find("currency"));
     
-    m_employees.push_back(employee);
+    employees.push_back(employee);
   }
   
-  return m_employees;
+  return employees;
 }
 
-void JsonFile::addJsonFileToDataBase()
+void JsonFile::addJsonFileToDataBase(const std::vector<Employee>& employees)
 {
   std::cout << " ------------------- JsonFile::addJsonFileToDataBase() ------------------- " << std::endl;
+  if(! m_database.isThereConnection())
+  {
+    std::cout << "there is no connection to the database.. no command to be sent" << std::endl;
+    return;
+  }
  
-  for(const auto& employee: m_employees)
+  for(const auto& employee: employees)
   {
     std::string command = "INSERT INTO person (id, name, title, age, city, salary, currency) VALUES ('";
-    std::string idAsString = std::to_string(employee.id);
-    std::string ageAsString = std::to_string(employee.age);
-    std::string salaryAsString = std::to_string(employee.salary.value);
-    command += idAsString + "', '"
+    command += std::to_string(employee.id) + "', '"
             + employee.name + "', '"
             + employee.title + "', '"
-            + ageAsString + "', '"
+            + std::to_string(employee.age) + "', '"
             + employee.address.city + "', '"
-            + salaryAsString + "', '"
+            + std::to_string(employee.salary.value) + "', '"
             + employee.salary.currency + "');";
 
-    if(m_database.isThereConnection())
-    {
-      m_database.mysqlExecuteQuery(command); 
-    }
-    else
-    {
-      std::cout << "there is no connection to the database.." << std::endl;
-      return;
-    }
+
+    m_database.mysqlExecuteQuery(command);
   }
 }
 ```
@@ -308,13 +298,13 @@ int main()
   
   testDatabase.isThereConnection();
 
-  JsonFile jsonFile(testDatabase); 
+  JsonFile jsonFile(testDatabase);
   std::cout << "--------------- reading json file: ---------------" << std::endl;
   const std::string& filePath = "input.json";
-  jsonFile.parseJsonFile(filePath);
+  auto fileData = jsonFile.parseJsonFile(filePath);
 
   std::cout << "--------------- adding the content of json file to database: ---------------" << std::endl;
-  jsonFile.addJsonFileToDataBase();
+  jsonFile.addJsonFileToDataBase(fileData);
 
   std::cout << "--------------- closing conenction to database: ---------------" << std::endl;
 
