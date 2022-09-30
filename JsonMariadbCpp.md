@@ -23,7 +23,7 @@ $ sudo ./readJsonWithCppInsertIntoDB
 ```
 ## Input file
 The input of this C++ application is an already existing json file (input.json)
-```
+<sub>
 {
     "employees": {
         "employee1": {
@@ -109,7 +109,7 @@ The input of this C++ application is an already existing json file (input.json)
         }
     }
 }
-```
+</sub>
 
 
 
