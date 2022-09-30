@@ -325,6 +325,14 @@ int main()
 
 
 # Reference:
+* https://www.youtube.com/watch?v=cSZvq7Kv6_0
 * https://github.com/nlohmann/json/issues/1703
 * https://mariadb.com/docs/connect/programming-languages/cpp/install/
 * https://mariadb.com/docs/connect/programming-languages/cpp/development/
+* https://github.com/nlohmann/json/blob/develop/docs/examples/README.cpp
+* https://mariadb.com/docs/connect/programming-languages/cpp/
+* https://mariadb.com/downloads/connectors/
+* https://stackoverflow.com/questions/3202136/using-g-to-compile-multiple-cpp-and-h-files
+* https://stackoverflow.com/questions/16710047/usr-bin-ld-cannot-find-lnameofthelibrary
+* https://stackoverflow.com/questions/36679189/how-to-find-mysql-ip-on-localhost 
+* https://mariadb.com/resources/blog/how-to-connect-c-programs-to-mariadb/
