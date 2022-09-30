@@ -13,7 +13,7 @@ To be able to build the C++ application, you need to link it with Mariadb connec
 
 
 So the final cooked command to build the application and run it is:
-```$ g++ database.cpp json.cpp main.cpp -o readJsonWithCppInsertIntoDB -L/usr/include/mariadb/mysql -L/usr/include/mariadb -lmariadbclient -lmariadbcpp -lmysqlcppconn```
+```$ g++ database.cpp json.cpp main.cpp -o readJsonWithCppInsertIntoDB -L/usr/include/mariadb -lmariadbcpp -lmysqlcppconn```
 ```sudo ./readJsonWithCppInsertIntoDB```
 
 
