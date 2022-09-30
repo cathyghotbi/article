@@ -323,6 +323,8 @@ int main()
 ### Demo!
 ![image](https://user-images.githubusercontent.com/17904210/193254895-859655d9-eaea-410c-83c3-ec35f70d42f2.png)
 
+## Summary
+As you see in the Demo! photo, an empty table in a database is filled with the data parsed from a json file.
 
 # Reference:
 * https://www.youtube.com/watch?v=cSZvq7Kv6_0
