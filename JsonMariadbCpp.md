@@ -1,5 +1,5 @@
 
-# C++ with nlohmann::json and Mariadb C++ connector
+# Simple Example of C++ with nlohmann::json and Mariadb C++ connector
 In this article, nlohmann::json and mariadb C++ connector are used together with C++ to read an input json file, parse the data of the file and then insert it into a database.
 ## Set up the development environment
 The development environment is Ubuntu 22.04.1 LTS which is installed on virtual box.
