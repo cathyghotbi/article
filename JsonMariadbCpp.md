@@ -319,6 +319,7 @@ int main()
   std::cout << "--------------- closing conenction to database: ---------------" << std::endl;
 
   return 0;
+}
 ```
 ### Demo!
 ![image](https://user-images.githubusercontent.com/17904210/193254895-859655d9-eaea-410c-83c3-ec35f70d42f2.png)
