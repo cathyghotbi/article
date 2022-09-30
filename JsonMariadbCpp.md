@@ -14,7 +14,8 @@ The final cooked command to build the application and run it is:
 ```sudo ./readJsonWithCppInsertIntoDB```
 
 ## Login to an already existing database named 'test' and see the table named 'person'
-```  $ sudo mysql -u root
+```
+  $ sudo mysql -u root
   MariaDB [(none)]> use test;
   MariaDB [test]> SELECT * FROM person;
 ```
