@@ -110,7 +110,182 @@ The input of this C++ application is an already existing json file (input.json)
     }
 }
 ```
+## Class structure
+The design of the application consists of 2 classes, DataBase and JsonFile dividing the representations and functionality related to file operations and database operations.
+### DataBase class
+```
+#pragma once
 
+#include <memory>
+
+#include <mariadb/conncpp.hpp>
+#include <mariadb/conncpp/Driver.hpp>
+
+class DataBase
+{
+public:
+  DataBase(const sql::SQLString& url,  sql::Properties& properties) //not const, km: prev ok since it was being copied into non-const meber variable
+  {
+    sql::Driver* driver = sql::mariadb::get_driver_instance();
+    if(driver == nullptr)
+    {
+      std::cout << "driver is null" << std::endl;
+      return;
+    }
+
+    auto* connection = driver->connect(url, properties);
+    if(connection == nullptr)
+    {
+      std::cout << "connection is null" << std::endl;
+      return;
+    }
+  
+    m_connection.reset(connection);
+  }
+
+  void mysqlExecuteQuery(std::string& sqlQuery);
+  bool isThereConnection();
+
+private:
+  std::unique_ptr<sql::Connection> m_connection; 
+};
+```
+```
+#include <string>
+#include <memory>
+#include <iostream>
+
+#include "database.hpp"
+
+void DataBase::mysqlExecuteQuery(std::string& sqlQuery)
+{
+  std::unique_ptr<sql::PreparedStatement> statement(m_connection->prepareStatement(sqlQuery));
+  statement->executeQuery();
+}
+
+bool DataBase::isThereConnection()
+{
+  return m_connection != nullptr;
+}
+```
+### JsonFile class
+```
+#pragma once
+
+#include <vector>
+#include <nlohmann/json.hpp>
+
+#include "database.hpp"
+
+struct Address
+{
+  std::string city;
+  int number;
+  std::string street;
+};
+
+struct Salary
+{
+  std::string currency;
+  int value;
+};
+
+struct Employee
+{
+  int id;
+  std::string name;
+  int age;
+  Address address;
+  std::vector<std::string> children;
+  Salary salary;
+  std::string title;
+};
+
+class JsonFile
+{
+public:
+  JsonFile(DataBase& db)
+    : m_database(db)
+  {
+    std::cout << " ------------------- JsonFile(const DataBase& db) ------------------- " << std::endl;
+  }
+  
+  std::vector<Employee> parseJsonFile(const std::string& inputFilePath); 
+  void addJsonFileToDataBase();
+
+private:
+  DataBase& m_database;
+  nlohmann::json m_jsonObjectFromFile;
+  std::vector<Employee> m_employees;
+};
+```
+```
+#include <iostream>
+#include <fstream>
+
+#include "json.hpp"
+
+
+std::vector<Employee> JsonFile::parseJsonFile(const std::string& inputFilePath)
+{
+  std::cout << " ------------------- JsonFile::readJsonFile(path) ------------------- " << std::endl;
+  std::ifstream fileToRead(inputFilePath);
+  fileToRead >> m_jsonObjectFromFile;
+  
+  std::string eachEmployee = "employee";
+  for(int i = 0; i < m_jsonObjectFromFile["employees"].size(); i++)
+  {
+    Address address;
+    Salary salary;
+    Employee employee;
+    
+    std::string eachEmployee = "employee";
+    eachEmployee += std::to_string(i+1);
+  
+    employee.id = *(m_jsonObjectFromFile["employees"][eachEmployee].find("id"));
+    employee.name = *(m_jsonObjectFromFile["employees"][eachEmployee].find("name"));
+    employee.title = *(m_jsonObjectFromFile["employees"][eachEmployee].find("title"));
+    employee.age = *(m_jsonObjectFromFile["employees"][eachEmployee].find("age"));
+    employee.address.city = *(m_jsonObjectFromFile["employees"][eachEmployee]["address"].find("city"));
+    employee.salary.value = *(m_jsonObjectFromFile["employees"][eachEmployee]["salary"].find("value"));
+    employee.salary.currency = *(m_jsonObjectFromFile["employees"][eachEmployee]["salary"].find("currency"));
+    
+    m_employees.push_back(employee);
+  }
+  
+  return m_employees;
+}
+
+void JsonFile::addJsonFileToDataBase()
+{
+  std::cout << " ------------------- JsonFile::addJsonFileToDataBase() ------------------- " << std::endl;
+ 
+  for(const auto& employee: m_employees)
+  {
+    std::string command = "INSERT INTO person (id, name, title, age, city, salary, currency) VALUES ('";
+    std::string idAsString = std::to_string(employee.id);
+    std::string ageAsString = std::to_string(employee.age);
+    std::string salaryAsString = std::to_string(employee.salary.value);
+    command += idAsString + "', '"
+            + employee.name + "', '"
+            + employee.title + "', '"
+            + ageAsString + "', '"
+            + employee.address.city + "', '"
+            + salaryAsString + "', '"
+            + employee.salary.currency + "');";
+
+    if(m_database.isThereConnection())
+    {
+      m_database.mysqlExecuteQuery(command); 
+    }
+    else
+    {
+      std::cout << "there is no connection to the database.." << std::endl;
+      return;
+    }
+  }
+}
+```
 
 
 # Reference:
