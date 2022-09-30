@@ -25,19 +25,14 @@ $ ./readJsonWithCppInsertIntoDB
 The input of this C++ application is an already existing json file (input.json)
 ```
 {
-    "employees": {
-        "employee1": {
+    "employees": [
+        {
             "address": {
                 "city": "Prague",
                 "number": 22,
                 "street": "Jeferson"
             },
             "age": 25,
-            "children": [
-                "Ben",
-                "Kimberly",
-                "Jack"
-            ],
             "id": 69,
             "name": "Eli",
             "salary": {
@@ -46,18 +41,13 @@ The input of this C++ application is an already existing json file (input.json)
             },
             "title": "dev"
         },
-        "employee2": {
+        {
             "address": {
                 "city": "Istanbul",
                 "number": 33,
                 "street": "Oak"
             },
             "age": 35,
-            "children": [
-                "Robin",
-                "Kevin",
-                "Adrian"
-            ],
             "id": 55,
             "name": "Angela",
             "salary": {
@@ -66,18 +56,13 @@ The input of this C++ application is an already existing json file (input.json)
             },
             "title": "dev"
         },
-        "employee3": {
+        {
             "address": {
                 "city": "Venice",
                 "number": 101,
                 "street": "Riverside"
             },
             "age": 45,
-            "children": [
-                "Emma",
-                "Eva",
-                "Eli"
-            ],
             "id": 101,
             "name": "Tom",
             "salary": {
@@ -86,19 +71,13 @@ The input of this C++ application is an already existing json file (input.json)
             },
             "title": "dev"
         },
-        "employee4": {
+        {
             "address": {
                 "city": "Athens",
                 "number": 88,
                 "street": "Montgomery"
             },
             "age": 55,
-            "children": [
-                "Oliver",
-                "Emily",
-                "Olivia",
-                "Sara"
-            ],
             "id": 77,
             "name": "Jerry",
             "salary": {
@@ -107,7 +86,7 @@ The input of this C++ application is an already existing json file (input.json)
             },
             "title": "dev"
         }
-    }
+    ]
 }
 ```
 ## Class structure
@@ -232,22 +211,20 @@ std::vector<Employee> JsonFile::parseJsonFile(const std::string& inputFilePath)
   fileToRead >> m_jsonObjectFromFile;
   
   std::vector<Employee> employees;
-  for(std::size_t i = 0; i < m_jsonObjectFromFile["employees"].size(); i++)
+
+  for(const auto& emp : m_jsonObjectFromFile["employees"])
   {
-    const auto eachEmployee = "employee" + std::to_string(i+1);
-    
     Employee employee;
-    employee.id = *(m_jsonObjectFromFile["employees"][eachEmployee].find("id"));
-    employee.name = *(m_jsonObjectFromFile["employees"][eachEmployee].find("name"));
-    employee.title = *(m_jsonObjectFromFile["employees"][eachEmployee].find("title"));
-    employee.age = *(m_jsonObjectFromFile["employees"][eachEmployee].find("age"));
-    employee.address.city = *(m_jsonObjectFromFile["employees"][eachEmployee]["address"].find("city"));
-    employee.salary.value = *(m_jsonObjectFromFile["employees"][eachEmployee]["salary"].find("value"));
-    employee.salary.currency = *(m_jsonObjectFromFile["employees"][eachEmployee]["salary"].find("currency"));
-    
+    employee.id = emp["id"];
+    employee.name = emp["name"];
+    employee.title = emp["title"];
+    employee.age = emp["age"];
+    employee.address.city = emp["address"]["city"];
+    employee.salary.value = emp["salary"]["value"];
+    employee.salary.currency = emp["salary"]["currency"];
     employees.push_back(employee);
   }
-  
+
   return employees;
 }
 
